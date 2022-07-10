@@ -131,8 +131,6 @@ const registerUserController = async (req, res, next) => {
 
 const loginUserController = async (req, res, next) => {
   try {
-    // get user by email
-    // if not found, send error, user not found
     const { username, password } = req.body;
 
     const connection = pool.promise();
