@@ -22,6 +22,7 @@ const registerUserController = async (req, res, next) => {
 
     const connection = pool.promise();
 
+    // Checking username and email
     const sqlGetUser = `SELECT username, email FROM user WHERE username = ? OR email = ? `;
     const dataGetUser = [username, email];
     const [resGetUser] = await connection.query(sqlGetUser, dataGetUser);
@@ -86,8 +87,10 @@ const registerUserController = async (req, res, next) => {
         message,
       };
 
-    // Hashing passowrd
+    // Hashing password
     const encryptedPassword = hash(password);
+
+    // Insert data into databases
     const sqlCreateUser = `INSERT INTO USER SET ?`;
     const dataCreateUser = [
       {
