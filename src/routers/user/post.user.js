@@ -42,7 +42,7 @@ const registerUserController = async (req, res, next) => {
       }
     }
 
-    // Checking password
+    // password validator with RegExp
     const checkPasswordValidity = (value) => {
       const isNonWhiteSpace = /^\S*$/;
       if (!isNonWhiteSpace.test(value)) {
