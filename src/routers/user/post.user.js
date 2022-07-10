@@ -45,7 +45,7 @@ const registerUserController = async (req, res, next) => {
       } else {
         throw {
           code: 400,
-          messsage: "Email is already exists",
+          message: "Email is already exists",
         };
       }
     }
@@ -129,6 +129,69 @@ const registerUserController = async (req, res, next) => {
   }
 };
 
+const loginUserController = async (req, res, next) => {
+  try {
+    // get user by email
+    // if not found, send error, user not found
+    const { username, password } = req.body;
+
+    const connection = pool.promise();
+
+    const sqlGetUser = `SELECT user_id, username, password, isVerified FROM user WHERE email = ? OR username = ?`;
+    const dataGetUser = [username, username];
+    const [resGetUser] = await connection.query(sqlGetUser, dataGetUser);
+
+    if (!resGetUser.length) {
+      throw {
+        code: 404,
+        message: `Can not find account with this username`,
+      };
+    }
+
+    // if doesn't match, send error
+    const user = resGetUser[0];
+
+    // check verified status
+    if (!user.isVerified) {
+      throw {
+        code: 403,
+        message: `You need verify first`,
+      };
+    }
+    // compare password
+    const isPasswordMatch = compare(password, user.password);
+
+    if (!isPasswordMatch) {
+      throw {
+        code: 401,
+        message: `Password is incorrect`,
+      };
+    }
+
+    // generate token
+    // send response with token
+    const token = createToken({
+      user_id: user.user_id,
+      username: user.username,
+    });
+
+    res.send({
+      status: "Success",
+      message: "Login Success",
+      data: {
+        result: {
+          user_id: user.user_id,
+          username: user.username,
+          accessToken: token,
+        },
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 router.post("/", registerUserController);
+router.post("/login", loginUserController);
 
 module.exports = router;
