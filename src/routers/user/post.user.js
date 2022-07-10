@@ -5,6 +5,7 @@ const { isFieldEmpties } = require("../../helper");
 const { hash, compare } = require("../../lib/bcryptjs");
 const { createToken } = require("../../lib/token");
 const { sendMail } = require("../../lib/nodemailer");
+const validator = require("email-validator");
 
 const registerUserController = async (req, res, next) => {
   try {
@@ -19,6 +20,12 @@ const registerUserController = async (req, res, next) => {
         data: { result: emptyFields },
       };
     }
+
+    if (!validator.validate(email))
+      throw {
+        code: 400,
+        message: `Please enter a valid email address`,
+      };
 
     const connection = pool.promise();
 
