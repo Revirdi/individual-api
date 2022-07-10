@@ -11,6 +11,7 @@ const verifyUserController = async (req, res, next) => {
     // verifiedToken = {user_id: 51}
     const veririedToken = verifyToken(token);
 
+    // build a connection
     const connection = pool.promise();
     const sqlUpdateIsVerifiedStatus = `UPDATE user SET ? WHERE user_id = ?`;
     const dataUpdateIsVerifiedStatus = [
