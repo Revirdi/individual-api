@@ -114,12 +114,13 @@ const loginUserController = async (req, res, next) => {
     const user = resGetUser[0];
 
     // check verified status
-    if (!user.isVerified) {
-      throw {
-        code: 403,
-        message: `You need verify first`,
-      };
-    }
+    // if (!user.isVerified) {
+    //   throw {
+    //     code: 403,
+    //     message: `You need verify first`,
+    //   };
+    // }
+
     // compare password
     const isPasswordMatch = compare(password, user.password);
 
