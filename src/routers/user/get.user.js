@@ -8,11 +8,12 @@ const verifyUserController = async (req, res, next) => {
   try {
     const { token } = req.params;
 
-    // verifiedToken = {user_id: 51}
+    // verifying token
     const veririedToken = verifyToken(token);
 
-    // build a connection
     const connection = pool.promise();
+
+    // make user verified to true
     const sqlUpdateIsVerifiedStatus = `UPDATE user SET ? WHERE user_id = ?`;
     const dataUpdateIsVerifiedStatus = [
       { isVerified: true },

@@ -13,6 +13,7 @@ const registerUserController = async (req, res, next) => {
 
     const emptyFields = isFieldEmpties({ username, email, password });
 
+    // checking empties fields
     if (emptyFields.length) {
       throw {
         code: 400,
@@ -21,6 +22,7 @@ const registerUserController = async (req, res, next) => {
       };
     }
 
+    // checking email validation
     if (!validator.validate(email))
       throw {
         code: 400,
@@ -77,8 +79,10 @@ const registerUserController = async (req, res, next) => {
       dataCreateUser
     );
 
+    // create token
     const token = createToken({ user_id: resCreateUser.insertId });
 
+    // sending verification via email
     await sendMail({ email, token });
 
     res.send({
@@ -99,6 +103,7 @@ const loginUserController = async (req, res, next) => {
 
     const connection = pool.promise();
 
+    // checking database with username or email
     const sqlGetUser = `SELECT user_id, username, password, isVerified FROM user WHERE email = ? OR username = ?`;
     const dataGetUser = [username, username];
     const [resGetUser] = await connection.query(sqlGetUser, dataGetUser);
@@ -132,12 +137,12 @@ const loginUserController = async (req, res, next) => {
     }
 
     // generate token
-    // send response with token
     const token = createToken({
       user_id: user.user_id,
       username: user.username,
     });
 
+    // send response with token
     res.send({
       status: "Success",
       message: "Login Success",
