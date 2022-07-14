@@ -7,7 +7,7 @@ const courier = nodemailer.createTransport({
   service: "gmail",
   auth: {
     type: "OAuth2",
-    user: "ardwyanreverdi@gmail.com",
+    user: "kepoloyaaapart5@gmail.com",
     clientId: CLIENT_ID,
     clientSecret: CLIENT_SECRET,
     refreshToken: REFRESH_TOKEN,
@@ -16,7 +16,7 @@ const courier = nodemailer.createTransport({
 
 const sendMail = async ({ email, token }) => {
   const mail = {
-    from: "DEVELOPER PURWADHIKA <ardwyanreverdi@gmail.com>",
+    from: "DEVELOPER CUITERS <kepoloyaaapart5@gmail.com>",
     to: email,
     subject: "User Verification",
     html: `<h1>Halo, klik <a href="http://localhost:2104/users/verification/${token}">link</a> berikut untuk verifikasi</h1>`,
